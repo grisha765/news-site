@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';  // Импортируем Link из react-router-dom
 import './header.css';
 
 function Header() {
@@ -18,7 +19,15 @@ function Header() {
 
   return (
     <div className="header-container">
-      <div className="header-title">Новосной сайт</div>
+      <Link to="/" className="header-title">Новостной сайт</Link> {/* Используем Link для возврата на главную страницу */}
+      <div className="button-container">
+        <button className="news-button" onClick={() => window.location.href = '/weekly-news'}>
+          Новости недели
+        </button>
+        <button className="anekdots-button" onClick={() => window.location.href = '/anekdots'}>
+          Анекдоты
+        </button>
+      </div>
       <div className="auth-container">
         <button className="login-button" onClick={handleLoginClick}>Вход</button>
         {showMenu && (
