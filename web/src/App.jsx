@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import './index.css';
+import Header from './Header';
 
 function App() {
   const [text, setText] = useState('Hello World');
@@ -12,12 +14,15 @@ function App() {
   };
 
   return (
-    <div 
-      className="hello-text"
-      onMouseEnter={handleMouseEnter} 
-      onMouseLeave={handleMouseLeave}
-    >
-      {text}
+    <div>
+      <Header />
+      <div 
+        className="hello-text"
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}
+      >
+        {text}
+      </div>
     </div>
   );
 }
