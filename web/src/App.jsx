@@ -4,16 +4,16 @@ function App() {
   const [text, setText] = useState('Hello World');
 
   const handleMouseEnter = () => {
-    setText('Click Me');
+    setText('World');
   };
 
   const handleMouseLeave = () => {
-    setText('Hello World');
+    setText('Hello');
   };
 
   return (
     <div 
-      style={{ fontSize: '24px', textAlign: 'center', marginTop: '20%' }}
+      className="hello-text"
       onMouseEnter={handleMouseEnter} 
       onMouseLeave={handleMouseLeave}
     >
