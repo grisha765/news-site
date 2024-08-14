@@ -1,0 +1,15 @@
+.weekly-news-container {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.weekly-news-container h1 {
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.weekly-news-container p {
+  font-size: 18px;
+}
+
