@@ -21,10 +21,10 @@ function Header() {
     <div className="header-container">
       <Link to="/" className="header-title">Новостной сайт</Link> {/* Используем Link для возврата на главную страницу */}
       <div className="button-container">
-        <button className="news-button" onClick={() => window.location.href = '/news_site#/weekly-news'}>
+        <button className="news-button" onClick={() => window.location.href = '#/weekly-news'}>
           Новости недели
         </button>
-        <button className="anekdots-button" onClick={() => window.location.href = '/news_site#/anekdots'}>
+        <button className="anekdots-button" onClick={() => window.location.href = '#/anekdots'}>
           Анекдоты
         </button>
       </div>
