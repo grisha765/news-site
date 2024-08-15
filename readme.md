@@ -1,11 +1,14 @@
 # news_site
 News site project on javascript, react, vite
 
-## Deploy
+## Deployed site on github pages
+[Gihub-Pages](https://grisha765.github.io/news_site/)
+
+## Self-deployment
 - **Install npm libs**:
     ```bash
     cd web/ &&\
-    npm Install
+    npm install
     ```
 
 - **Run vite server**:
