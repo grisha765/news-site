@@ -18,6 +18,9 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Change Dir to web
+        run: cd web/ && ls -la
+
       - name: Install dependencies
         run: npm install
 
