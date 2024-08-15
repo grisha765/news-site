@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';  // Импортируем Link из react-router-dom
-import './header.css';
+import './styles/header.css';
 
 function Header() {
   const [showMenu, setShowMenu] = useState(false);
@@ -19,12 +19,12 @@ function Header() {
 
   return (
     <div className="header-container">
-      <Link to="/" className="header-title">Новостной сайт</Link> {/* Используем Link для возврата на главную страницу */}
+      <Link to="/news_site/" className="header-title">Новостной сайт</Link> {/* Используем Link для возврата на главную страницу */}
       <div className="button-container">
-        <button className="news-button" onClick={() => window.location.href = '/weekly-news'}>
+        <button className="news-button" onClick={() => window.location.href = '/news_site/weekly-news'}>
           Новости недели
         </button>
-        <button className="anekdots-button" onClick={() => window.location.href = '/anekdots'}>
+        <button className="anekdots-button" onClick={() => window.location.href = '/news_site/anekdots'}>
           Анекдоты
         </button>
       </div>

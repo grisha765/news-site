@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import './index.css';
+import './styles/index.css';
 import Header from './Header';
 import WeeklyNews from './WeeklyNews';
 import Anekdots from './Anekdots'
@@ -21,7 +21,7 @@ function App() {
       <Header />
       <Routes>
         <Route 
-          path="/" 
+          path="/news_site/" 
           element={
             <div 
               className="hello-text"
@@ -32,8 +32,8 @@ function App() {
             </div>
           } 
         />
-        <Route path="/weekly-news" element={<WeeklyNews />} />
-        <Route path="/Anekdots" element={<Anekdots />} />
+        <Route path="/news_site/weekly-news" element={<WeeklyNews />} />
+        <Route path="/news_site/Anekdots" element={<Anekdots />} />
       </Routes>
     </Router>
   );

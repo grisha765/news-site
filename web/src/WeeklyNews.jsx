@@ -1,5 +1,5 @@
 import React from 'react';
-import './weeklyNews.css';
+import './styles/weeklyNews.css';
 
 function WeeklyNews() {
   return (

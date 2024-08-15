@@ -1,5 +1,5 @@
 import React from 'react';
-import './anekdots.css';
+import './styles/anekdots.css';
 
 function Anekdots() {
   return (
