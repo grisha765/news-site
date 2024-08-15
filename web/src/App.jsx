@@ -21,7 +21,7 @@ function App() {
       <Header />
       <Routes>
         <Route 
-          path="/news_site/" 
+          path="/" 
           element={
             <div 
               className="hello-text"
@@ -32,8 +32,8 @@ function App() {
             </div>
           } 
         />
-        <Route path="/news_site/weekly-news" element={<WeeklyNews />} />
-        <Route path="/news_site/Anekdots" element={<Anekdots />} />
+        <Route path="/weekly-news" element={<WeeklyNews />} />
+        <Route path="/Anekdots" element={<Anekdots />} />
       </Routes>
     </Router>
   );
