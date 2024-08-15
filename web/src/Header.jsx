@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';  // Импортируем Link из react-router-dom
+import { Link } from 'react-router-dom';
 import './styles/header.css';
 
 function Header() {
   const [showMenu, setShowMenu] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
+  const [isFrozen, setIsFrozen] = useState(false); 
   const handleLoginClick = () => {
+    setIsFrozen(!isFrozen);
     setShowMenu(!showMenu);
   };
 
@@ -21,15 +22,18 @@ function Header() {
     <div className="header-container">
       <Link to="/" className="header-title">Новостной сайт</Link> {/* Используем Link для возврата на главную страницу */}
       <div className="button-container">
-        <button className="news-button" onClick={() => window.location.href = '#/weekly-news'}>
+        <button className="button" onClick={() => window.location.href = '#'}>
+          Главная
+        </button>
+        <button className="button" onClick={() => window.location.href = '#/weekly-news'}>
           Новости недели
         </button>
-        <button className="anekdots-button" onClick={() => window.location.href = '#/anekdots'}>
+        <button className="button" onClick={() => window.location.href = '#/anekdots'}>
           Анекдоты
         </button>
       </div>
       <div className="auth-container">
-        <button className="login-button" onClick={handleLoginClick}>Вход</button>
+        <button className={`login-button ${isFrozen ? 'frozen' : ''}`} onClick={handleLoginClick}>Вход</button>
         {showMenu && (
           <div className="login-menu">
             <input
