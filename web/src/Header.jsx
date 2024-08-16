@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './styles/header.css';
+import { UserContext } from './UserContext';
 
 function Header() {
   const [showMenu, setShowMenu] = useState(false);
@@ -9,7 +10,7 @@ function Header() {
   const [password, setPassword] = useState('');
   const [isFrozen, setIsFrozen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userData, setUserData] = useState({ username: '', role: '' });
+  const { userData, setUserData } = useContext(UserContext);
 
   const handleLoginClick = () => {
     setIsFrozen(!isFrozen);
@@ -20,9 +21,11 @@ function Header() {
     try {
       setIsFrozen(!isFrozen);
       const response = await axios.post('http://0.0.0.0:8000/login', { username, password });
-      setUserData({ username: response.data.user, role: response.data.role });
+      const user = { username: response.data.user, role: response.data.role };
+      setUserData(user);
       setIsLoggedIn(true);
       setShowMenu(false);
+
     } catch (error) {
       console.error('Ошибка входа:', error);
       setShowMenu(false);
@@ -94,4 +97,5 @@ function Header() {
 }
 
 export default Header;
+
 
