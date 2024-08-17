@@ -11,8 +11,27 @@ News site project on javascript, react, vite
     npm install
     ```
 
-- **Run vite server**:
+- **Run frontend**:
     ```bash
     npm run dev
     ```
 
+- **Install python libs**:
+    ```bash
+    python3 -m venv .venv &&\
+    .venv/bin/python -m pip install -r requirements.txt
+    ```
+
+- **Run backend**:
+    ```bash
+    .venv/bin/python back
+    ```
+
+    - **Other working env's**:
+        ```env
+        LOG_LEVEL='DEBUG'
+        API_IP='0.0.0.0'
+        API_PORT='8000'
+        DB_PATH='sqlite://:memory:'
+        TESTS='True'
+        ```
