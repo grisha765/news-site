@@ -41,7 +41,7 @@ function Header() {
 
   return (
     <div className="header-container">
-      <Link to="/" className="header-title">Новостной сайт</Link>
+      <Link to="/" className="header-title">Новости</Link>
       <div className="button-container">
         <button className="button" onClick={() => window.location.href = '#'}>
           Главная
