@@ -6,8 +6,12 @@ from config.config import Config
 from config import logging_config
 logging = logging_config.setup_logging(__name__)
 
-async def main():
+def main():
     uvicorn.run("core.api:app", host=Config.api_ip, port=Config.api_port, reload=True)
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    if Config.tests == "True":
+        from autotests.run import run
+        asyncio.run(run())
+    else:
+        main()
