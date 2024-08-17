@@ -16,9 +16,9 @@ async def run():
             log_message = self.format(record)
             if 'passed!' in log_message:
                 passed_count += 1
-            elif 'failed' in log_message or 'An error occurred' in log_message:
+            elif record.levelname == 'ERROR' or 'An error occurred' in log_message:
                 error_count += 1
-            elif 'Warning' in log_message:
+            elif record.levelname == 'WARNING':
                 warning_count += 1
 
     test_logging_handler = TestLoggingHandler()
