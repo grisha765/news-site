@@ -19,6 +19,22 @@ class FileModel(Model):
     class Meta:
         table = "files"
 
+class Category(Model):
+    id = fields.IntField(pk=True)
+    name = fields.CharField(max_length=255, unique=True)
+
+    class Meta:
+        table = "categories"
+
+class PostModel(Model):
+    id = fields.IntField(pk=True)
+    header = fields.CharField(max_length=255)
+    body = fields.TextField()
+    category = fields.ForeignKeyField('models.Category', related_name='texts')
+
+    class Meta:
+        table = "posts"
+
 if __name__ == "__main__":
     raise RuntimeError("This module should be run only via main.py")
 
