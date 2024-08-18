@@ -8,6 +8,11 @@ class LoginResponse(BaseModel):
     user: str
     role: str
 
+class PostCreate(BaseModel):
+    header: str
+    body: str
+    category: str
+
 if __name__ == "__main__":
     raise RuntimeError("This module should be run only via main.py")
 
