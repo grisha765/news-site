@@ -1,6 +1,5 @@
 from db.models import Auth
-from db.auth import create_user_if_not_exists, authenticate_user, hash_password
-from db.db import init, close
+from db.auth import create_user_if_not_exists, authenticate_user
 from config import logging_config
 logging = logging_config.setup_logging(__name__)
 
@@ -31,7 +30,6 @@ async def test_authenticate_user():
     assert user_wrong is None, "Authentication should have failed with wrong password"
 
 async def run_tests():
-    await init()
 
     try:
         await test_create_user()
@@ -41,8 +39,6 @@ async def run_tests():
         logging.info("Test test_authenticate_user passed!")
     except AssertionError as e:
         logging.error(f"Test failed: {e}")
-    finally:
-        await close()
         
 if __name__ == "__main__":
     raise RuntimeError("This module should be run only via main.py")
