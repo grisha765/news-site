@@ -1,7 +1,9 @@
 import os
 from config import logging_config
 import logging as logging_base
-from autotests.db_tests import run_tests
+from db.db import init, close
+from autotests.dbauth_tests import run_tests as dbauth_tests
+from autotests.dbfile_tests import run_tests as dbfile_tests
 
 async def run():
     logging = logging_config.setup_logging(__name__)
@@ -25,12 +27,15 @@ async def run():
     logging_base.getLogger().addHandler(test_logging_handler)
 
     try:
+        await init()
         logging.info(f'Start tests...')
-        await run_tests()
+        await dbauth_tests()
+        await dbfile_tests()
     except Exception as e:
         logging.error(f"An error occurred during test execution: {e}")
     finally:
         logging.info(f'All tests completed! [Errors: {error_count}, Warnings: {warning_count}, Passed: {passed_count}]')
+        await close()
         if error_count > 0:
             os._exit(1)
         else:
