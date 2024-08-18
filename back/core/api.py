@@ -1,8 +1,10 @@
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, UploadFile, HTTPException, File
+from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from db.db import init, close
 from db.auth import create_user_if_not_exists, authenticate_user, hash_password
 from core.modules import LoginRequest, LoginResponse
+from db.file import upload_file, get_file
 
 async def lifespan(app: FastAPI):
     await init()
@@ -37,6 +39,16 @@ async def login(request: LoginRequest):
     
     return LoginResponse(user=user.user, role=user.role)
 
+@app.post("/uploadfile/")
+async def upload_file_endpoint(file: UploadFile = File(...)):
+    return await upload_file(file)
+
+@app.get("/downloadfile/{file_id}")
+async def get_file_endpoint(file_id: int):
+    response = await get_file(file_id)
+    if response == False:
+        raise HTTPException(status_code=404, detail="File not found")
+    return StreamingResponse(response, media_type="image/jpeg", headers={"Content-Disposition": f"inline; filename=image"})
 
 if __name__ == "__main__":
     raise RuntimeError("This module should be run only via main.py")
