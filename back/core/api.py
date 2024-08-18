@@ -3,8 +3,9 @@ from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from db.db import init, close
 from db.auth import create_user_if_not_exists, authenticate_user, hash_password
-from core.modules import LoginRequest, LoginResponse
+from core.modules import LoginRequest, LoginResponse, PostCreate
 from db.file import upload_file, get_file
+from db.post import add_post, delete_post, get_post, get_all_posts
 
 async def lifespan(app: FastAPI):
     await init()
@@ -49,6 +50,35 @@ async def get_file_endpoint(file_id: int):
     if response == False:
         raise HTTPException(status_code=404, detail="File not found")
     return StreamingResponse(response, media_type="image/jpeg", headers={"Content-Disposition": f"inline; filename=image"})
+
+@app.post("/texts/")
+async def create_post(text: PostCreate):
+    created_text = await add_post(text.header, text.body, text.category)
+    return {
+        "id": created_text.id,
+        "header": created_text.header,
+        "body": created_text.body,
+        "category": created_text.category.name
+    }
+
+@app.delete("/texts/{text_id}")
+async def remove_post(text_id: int):
+    success = await delete_post(text_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Post not found")
+    return {"detail": "Text deleted successfully"}
+
+@app.get("/texts/{text_id}")
+async def read_post(text_id: int):
+    text = await get_post(text_id)
+    if not text:
+        raise HTTPException(status_code=404, detail="Post not found")
+    return text
+
+@app.get("/texts/")
+async def read_all_posts():
+    texts = await get_all_posts()
+    return texts
 
 if __name__ == "__main__":
     raise RuntimeError("This module should be run only via main.py")
