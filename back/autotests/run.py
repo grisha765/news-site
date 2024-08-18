@@ -4,6 +4,7 @@ import logging as logging_base
 from db.db import init, close
 from autotests.dbauth_tests import run_tests as dbauth_tests
 from autotests.dbfile_tests import run_tests as dbfile_tests
+from autotests.dbpost_tests import run_tests as dbpost_tests
 
 async def run():
     logging = logging_config.setup_logging(__name__)
@@ -31,6 +32,7 @@ async def run():
         logging.info(f'Start tests...')
         await dbauth_tests()
         await dbfile_tests()
+        await dbpost_tests()
     except Exception as e:
         logging.error(f"An error occurred during test execution: {e}")
     finally:
