@@ -10,6 +10,15 @@ class Auth(Model):
     class Meta:
         table = "auth"
 
+class FileModel(Model):
+    id = fields.IntField(pk=True)
+    filename = fields.CharField(max_length=255)
+    file_content = fields.BinaryField()
+    description = fields.TextField(null=True)
+
+    class Meta:
+        table = "files"
+
 if __name__ == "__main__":
     raise RuntimeError("This module should be run only via main.py")
 
