@@ -1,6 +1,6 @@
 from io import BytesIO
 from db.models import FileModel
-from db.file import upload_file, get_file
+from db.file import upload_file, get_file, del_file
 from config import logging_config
 logging = logging_config.setup_logging(__name__)
 
@@ -45,6 +45,23 @@ async def test_get_file():
         assert "does not exist" in str(e), f"Unexpected error message: {e}"
         logging.warning("Test for non-existing file ID passed with expected exception!")
 
+async def test_delete_file():
+    db_file = await FileModel.get_or_none(filename="test_file.txt")
+    assert db_file is not None, "File should exist in the database before deletion"
+
+    delete_result = await del_file(db_file.id)
+    assert delete_result["status"] == "success", "File deletion failed"
+
+    db_file_after_delete = await FileModel.get_or_none(id=db_file.id)
+    assert db_file_after_delete is None, "File was not deleted from the database"
+
+    try:
+        delete_result_again = await del_file(db_file.id + 999)
+        assert delete_result_again is False, "Function should have returned False for non-existing file ID"
+    except Exception as e:
+        assert "does not exist" in str(e), f"Unexpected error message: {e}"
+        logging.warning("Test for non-existing file ID passed with expected exception!")
+
 async def run_tests():
     try:
         await test_upload_file()
@@ -52,6 +69,9 @@ async def run_tests():
         
         await test_get_file()
         logging.info("Test test_get_file passed!")
+
+        await test_delete_file()
+        logging.info("Test test_delete_file passed!")
     except AssertionError as e:
         logging.error(f"Test failed: {e}")
         
