@@ -41,10 +41,10 @@ async def del_file(file_id: int):
     except Exception as e:
         if "does not exist" in str(e):
             logging.warning(f"File with ID: %d not found {file_id}")
-            return False
+            return {"status": "error", "message": "File not found"}
         else:
             logging.error(f"Error while performing operation: {e}")
-            return False
+            return {"status": "error", "message": "Error operation"}
 
     await db_file.delete()
 
