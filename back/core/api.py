@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from db.db import init, close
 from db.auth import create_user_if_not_exists, authenticate_user, hash_password
 from core.modules import LoginRequest, LoginResponse, PostCreate
-from db.file import upload_file, get_file
+from db.file import upload_file, get_file, del_file
 from db.post import add_post, delete_post, get_post, get_all_posts
 
 async def lifespan(app: FastAPI):
@@ -50,6 +50,13 @@ async def get_file_endpoint(file_id: int):
     if response == False:
         raise HTTPException(status_code=404, detail="File not found")
     return StreamingResponse(response, media_type="image/jpeg", headers={"Content-Disposition": f"inline; filename=image"})
+
+@app.delete("/deletefile/{file_id}")
+async def delete_file_endpoint(file_id: int):
+    result = await del_file(file_id)
+    if result["status"] == "error":
+        raise HTTPException(status_code=404, detail=result["message"])
+    return result
 
 @app.post("/texts/")
 async def create_post(text: PostCreate):
