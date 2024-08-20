@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import api from './api';
 import './styles/header.css';
+import CreatePost from './CreatePost';
 import { UserContext } from './UserContext';
 
 function Header() {
@@ -10,6 +11,7 @@ function Header() {
   const [password, setPassword] = useState('');
   const [isFrozen, setIsFrozen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showCreatePost, setShowCreatePost] = useState(false);
   const { userData, setUserData } = useContext(UserContext);
 
   const handleLoginClick = () => {
@@ -39,6 +41,14 @@ function Header() {
     setPassword('');
   };
 
+  const handleCreatePostClick = () => {
+    setShowCreatePost(true); // Открываем модальное окно
+  };
+
+  const handleCloseCreatePost = () => {
+    setShowCreatePost(false); // Закрываем модальное окно
+  };
+
   return (
     <div className="header-container">
       <Link to="/" className="header-title">Новости</Link>
@@ -54,6 +64,11 @@ function Header() {
         </button>
       </div>
       <div className="auth-container">
+        {isLoggedIn && userData.role === 'admin' && (
+          <button className="button" onClick={handleCreatePostClick}>
+            Создать Пост
+          </button>
+        )}
         {isLoggedIn ? (
           <div className="user-menu">
             <button className={`login-button ${isFrozen ? 'frozen' : ''}`} onClick={handleLoginClick}>
@@ -92,6 +107,7 @@ function Header() {
           </>
         )}
       </div>
+      {showCreatePost && <CreatePost onClose={handleCloseCreatePost} />}
     </div>
   );
 }
