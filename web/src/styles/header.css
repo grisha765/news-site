@@ -16,6 +16,8 @@
 .auth-container {
   position: relative;
   margin-left: auto;
+  align-items: center;
+  display: flex;
 }
 
 .dropdown-menu,
