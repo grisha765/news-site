@@ -23,13 +23,27 @@ async def get_file(file_id: int):
     db_file = await FileModel.get(id=file_id)
 
     if not db_file:
-        logging.debug(f"File with ID: %d not found {file_id}")
+        logging.warning(f"File with ID: %d not found {file_id}")
         return False
 
     logging.debug(f"File with ID: {file_id} found, size: {len(db_file.file_content)} bytes")
 
     file_like = BytesIO(db_file.file_content)
     return file_like
+
+async def del_file(file_id: int):
+    logging.debug(f"Attempting to delete file with ID: {file_id}")
+
+    db_file = await FileModel.get(id=file_id)
+
+    if not db_file:
+        logging.warning(f"File with ID: {file_id} not found")
+        return {"status": "error", "message": "File not found"}
+
+    await db_file.delete()
+
+    logging.debug(f"File with ID: {file_id} successfully deleted")
+    return {"status": "success", "message": f"File with ID {file_id} deleted"}
 
 if __name__ == "__main__":
     raise RuntimeError("This module should be run only via main.py")
