@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from './api';
 import './styles/header.css';
 import { UserContext } from './UserContext';
 
@@ -20,7 +20,7 @@ function Header() {
   const handleLoginSubmit = async () => {
     try {
       setIsFrozen(!isFrozen);
-      const response = await axios.post('http://0.0.0.0:8000/login', { username, password });
+      const response = await api.post('/login', { username, password });
       const user = { username: response.data.user, role: response.data.role };
       setUserData(user);
       setIsLoggedIn(true);
