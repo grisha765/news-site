@@ -19,12 +19,15 @@ async def upload_file(file):
 
 async def get_file(file_id: int):
     logging.debug(f"Requesting file with ID: {file_id}")
-
-    db_file = await FileModel.get(id=file_id)
-
-    if not db_file:
-        logging.warning(f"File with ID: %d not found {file_id}")
-        return False
+    try:
+        db_file = await FileModel.get(id=file_id)
+    except Exception as e:
+        if "does not exist" in str(e):
+            logging.warning(f"File with ID: %d not found {file_id}")
+            return False
+        else:
+            logging.error(f"Error while performing operation: {e}")
+            return False
 
     logging.debug(f"File with ID: {file_id} found, size: {len(db_file.file_content)} bytes")
 
@@ -33,12 +36,15 @@ async def get_file(file_id: int):
 
 async def del_file(file_id: int):
     logging.debug(f"Attempting to delete file with ID: {file_id}")
-
-    db_file = await FileModel.get(id=file_id)
-
-    if not db_file:
-        logging.warning(f"File with ID: {file_id} not found")
-        return {"status": "error", "message": "File not found"}
+    try:
+        db_file = await FileModel.get(id=file_id)
+    except Exception as e:
+        if "does not exist" in str(e):
+            logging.warning(f"File with ID: %d not found {file_id}")
+            return False
+        else:
+            logging.error(f"Error while performing operation: {e}")
+            return False
 
     await db_file.delete()
 
