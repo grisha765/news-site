@@ -57,7 +57,8 @@ async def test_delete_file():
 
     try:
         delete_result_again = await del_file(db_file.id + 999)
-        assert delete_result_again is False, "Function should have returned False for non-existing file ID"
+        assert delete_result_again["status"] == "error", "File deletion should have failed for non-existing file"
+        assert delete_result_again["message"] == "File not found", "Error message mismatch for non-existing file"
     except Exception as e:
         assert "does not exist" in str(e), f"Unexpected error message: {e}"
         logging.warning("Test for non-existing file ID passed with expected exception!")
