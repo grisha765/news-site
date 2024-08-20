@@ -72,3 +72,9 @@ button[type="submit"]:hover {
   background-color: #218838;
 }
 
+.error-message {
+  color: red;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
