@@ -68,13 +68,31 @@
 }
 
 .modal-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 80%;
-  max-width: 500px;
-  text-align: center;
-  position: relative;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: auto;
+    min-width: 300px;
+    max-width: 90%;
+    max-height: 90%;
+    text-align: center;
+    position: relative;
+    overflow-y: auto;
+    margin: auto;
+}
+
+.modal-content p {
+    max-height: 70vh;
+    overflow-y: auto;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        max-width: none;
+        height: auto;
+    }
 }
 
 .modal-image {
