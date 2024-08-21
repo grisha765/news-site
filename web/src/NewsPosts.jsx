@@ -4,6 +4,8 @@ import api from './api';
 import { UserContext } from './UserContext';
 import CreatePost from './CreatePost';
 
+const imageCache = new Map();
+
 function NewsPosts({ categories = [] }) {
   const [posts, setPosts] = useState([]);
 
@@ -35,6 +37,7 @@ function NewsPosts({ categories = [] }) {
 
     api.delete(`/deletefile/${postId}`)
       .then(response => {
+        imageCache.delete(postId);  // Удаляем изображение из кэша
         console.log('Изображение удалено:', response.data);
       })
       .catch(error => {
@@ -58,14 +61,19 @@ function NewsCard({ post, onDelete }) {
   const { userData } = useContext(UserContext);
 
   useEffect(() => {
-    api.get(`/downloadfile/${post.id}`, { responseType: 'blob' })
-      .then(response => {
-        const imageUrl = URL.createObjectURL(response.data);
-        setImage(imageUrl);
-      })
-      .catch(error => {
-        console.error('Ошибка при загрузке изображения:', error);
-      });
+    if (imageCache.has(post.id)) {
+      setImage(imageCache.get(post.id));
+    } else {
+      api.get(`/downloadfile/${post.id}`, { responseType: 'blob' })
+        .then(response => {
+          const imageUrl = URL.createObjectURL(response.data);
+          imageCache.set(post.id, imageUrl);
+          setImage(imageUrl);
+        })
+        .catch(error => {
+          console.error('Ошибка при загрузке изображения:', error);
+        });
+    }
   }, [post.id]);
 
   const handleCardClick = () => {
