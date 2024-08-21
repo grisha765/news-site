@@ -61,7 +61,7 @@ h2 {
 button[type="submit"] {
   width: 100%;
   padding: 10px;
-  background-color: #28a745;
+  background-color: green;
   color: white;
   border: none;
   border-radius: 3px;
@@ -69,7 +69,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background-color: #218838;
+  background-color: darkgreen;
 }
 
 .error-message {
