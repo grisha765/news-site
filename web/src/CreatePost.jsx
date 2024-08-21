@@ -1,13 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles/createPost.css';
 import api from './api';
 
-function CreatePost({ onClose }) {
-  const [header, setHeader] = useState('');
-  const [body, setBody] = useState('');
-  const [category, setCategory] = useState('');
+const CATEGORIES = ['main', 'weekly-news', 'anekdots']; // Предопределенные категории
+
+function CreatePost({ onClose, postToEdit = null }) {
+  const [header, setHeader] = useState(postToEdit ? postToEdit.header : '');
+  const [body, setBody] = useState(postToEdit ? postToEdit.body : '');
+  const [category, setCategory] = useState(postToEdit ? postToEdit.category : CATEGORIES[0]);
   const [file, setFile] = useState(null);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (postToEdit) {
+      setHeader(postToEdit.header);
+      setBody(postToEdit.body);
+      setCategory(postToEdit.category);
+    }
+  }, [postToEdit]);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -17,7 +27,19 @@ function CreatePost({ onClose }) {
     e.preventDefault();
     setError('');
 
+    if (!file && !postToEdit) {
+      setError('Пожалуйста, загрузите фото для поста.');
+      return;
+    }
+
     try {
+      // Если редактируем пост, сначала удаляем старый
+      if (postToEdit) {
+        await api.delete(`/texts/${postToEdit.id}`);
+        await api.delete(`/deletefile/${postToEdit.id}`);
+      }
+
+      // Создаем новый пост
       const postResponse = await api.post('/texts/', {
         header,
         body,
@@ -43,7 +65,7 @@ function CreatePost({ onClose }) {
 
       setHeader('');
       setBody('');
-      setCategory('');
+      setCategory(CATEGORIES[0]);
       setFile(null);
 
       onClose();
@@ -61,7 +83,7 @@ function CreatePost({ onClose }) {
     <div className="create-post-modal">
       <div className="create-post-content">
         <button className="close-button" onClick={onClose}>X</button>
-        <h2>Создать новый пост</h2>
+        <h2>{postToEdit ? 'Редактировать пост' : 'Создать новый пост'}</h2>
         {error && <p className="error-message">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -85,13 +107,18 @@ function CreatePost({ onClose }) {
           </div>
           <div className="form-group">
             <label htmlFor="category">Категория</label>
-            <input
-              type="text"
+            <select
               id="category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               required
-            />
+            >
+              {CATEGORIES.map(cat => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="form-group">
             <label htmlFor="file">Загрузить фото</label>
@@ -100,9 +127,10 @@ function CreatePost({ onClose }) {
               id="file"
               onChange={handleFileChange}
               accept="image/*"
+              required={!postToEdit} // Файл обязателен только при создании нового поста
             />
           </div>
-          <button type="submit">Создать</button>
+          <button type="submit">{postToEdit ? 'Сохранить изменения' : 'Создать'}</button>
         </form>
       </div>
     </div>
