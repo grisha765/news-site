@@ -5,19 +5,15 @@ import Header from './Header';
 import WeeklyNews from './WeeklyNews';
 import Anekdots from './Anekdots';
 import { UserProvider, UserContext } from './UserContext';
+import NewsPosts from './NewsPosts';
 
-function AppContent() { // Создаем отдельный компонент для содержимого приложения
+function AppContent() {
   const { userData } = useContext(UserContext);
 
-  const [text, setText] = useState('Hello');
+  const username = userData?.username || 'Аноним';
+  const role = userData?.role || 'без роли';
 
-  const handleMouseEnter = () => {
-    setText('World');
-  };
-
-  const handleMouseLeave = () => {
-    setText('Hello');
-  };
+  const selectedCategories = ['main'];
 
   return (
     <Router>
@@ -26,12 +22,9 @@ function AppContent() { // Создаем отдельный компонент 
         <Route 
           path="/" 
           element={
-            <div 
-              className="hello-text"
-              onMouseEnter={handleMouseEnter} 
-              onMouseLeave={handleMouseLeave}
-            >
-              {userData.username ? `${userData.username} (${userData.role})` : text}
+            <div className="main-container">
+              <h1>Главные новости для {username} ({role})</h1>
+              <NewsPosts categories={selectedCategories} />
             </div>
           } 
         />
@@ -45,7 +38,7 @@ function AppContent() { // Создаем отдельный компонент 
 function App() {
   return (
     <UserProvider>
-      <AppContent /> {/* Оборачиваем наше содержимое в UserProvider */}
+      <AppContent />
     </UserProvider>
   );
 }
