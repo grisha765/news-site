@@ -24,6 +24,8 @@ jobs:
         run: npm install --prefix web
 
       - name: Build the project
+        env:
+          VITE_IP_ADDRESS: ${{ secrets.BACK_IP }}
         run: npm run build --prefix web
 
       - name: Deploy to GitHub Pages
