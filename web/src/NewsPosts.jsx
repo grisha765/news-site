@@ -58,6 +58,8 @@ function NewsCard({ post, onDelete }) {
   const [image, setImage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
   const { userData } = useContext(UserContext);
 
   useEffect(() => {
@@ -78,6 +80,7 @@ function NewsCard({ post, onDelete }) {
 
   const handleCardClick = () => {
     setIsModalOpen(true);
+    fetchComments();
   };
 
   const handleCloseModal = () => {
@@ -93,6 +96,47 @@ function NewsCard({ post, onDelete }) {
     setIsEditModalOpen(false);
   };
 
+  const fetchComments = () => {
+    api.get(`/comments/?post_id=${post.id}`)
+      .then(response => {
+        setComments(response.data);
+      })
+      .catch(error => {
+        console.error('Ошибка при загрузке комментариев:', error);
+        setComments([]);
+      });
+  };
+
+  const handleAddComment = () => {
+    if (newComment.trim() === '') return;
+
+    const commentData = {
+      post_id: post.id,
+      user: userData.username,
+      text: newComment,
+    };
+
+    api.post('/comments/', commentData)
+      .then(response => {
+        fetchComments();
+        setNewComment('');
+      })
+      .catch(error => {
+        console.error('Ошибка при добавлении комментария:', error);
+      });
+  };
+
+  const handleDeleteComment = (commentId) => {
+    api.delete(`/comments/${post.id}/${commentId}`)
+      .then(response => {
+        fetchComments();
+      })
+      .catch(error => {
+        console.error('Ошибка при удалении комментария:', error);
+      });
+  };
+
+
   return (
     <>
       <div className="news-card" onClick={handleCardClick}>
@@ -103,21 +147,45 @@ function NewsCard({ post, onDelete }) {
       </div>
 
       {isModalOpen && (
-        <div className="modal" onClick={handleCloseModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <span className="close" onClick={handleCloseModal}>&times;</span>
-            <h2>{post.header}</h2>
-            <p>{post.body}</p>
-            {image && <img src={image} alt={post.header} className="modal-image" />}
-            {userData.role === 'admin' && (
-              <>
-                <button className="edit-button" onClick={handleEditClick}>Редактировать</button>
-                <button className="delete-button" onClick={() => onDelete(post.id)}>Удалить</button>
-              </>
-            )}
+          <div className="modal" onClick={handleCloseModal}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                  <div className="modal-content-left">
+                      <span className="close" onClick={handleCloseModal}>&times;</span>
+                      <h2>{post.header}</h2>
+                      <p>{post.body}</p>
+                      {image && <img src={image} alt={post.header} className="modal-image" />}
+                      {userData.role === 'admin' && (
+                          <>
+                              <button className="edit-button" onClick={handleEditClick}>Редактировать</button>
+                              <button className="delete-button" onClick={() => onDelete(post.id)}>Удалить</button>
+                          </>
+                      )}
+                  </div>
+                  <div className="comments-section">
+                      <h3>Комментарии</h3>
+                      {comments.map((comment, index) => (
+                          <div key={comment.id || index} className="comment">
+                              <p><strong>{comment.username}</strong>: {comment.text}</p>
+                              {userData.role === 'admin' && (
+                                  <button onClick={() => handleDeleteComment(comment.id)}>Удалить</button>
+                              )}
+                          </div>
+                      ))}
+                      {['user', 'admin'].includes(userData.role) && (
+                          <div className="add-comment">
+                              <textarea
+                                  value={newComment}
+                                  onChange={(e) => setNewComment(e.target.value)}
+                                  placeholder="Напишите комментарий"
+                              />
+                              <button onClick={handleAddComment}>Отправить</button>
+                          </div>
+                      )}
+                  </div>
+              </div>
           </div>
-        </div>
       )}
+
 
       {isEditModalOpen && (
         <CreatePost postToEdit={post} onClose={handleCloseEditModal} />
@@ -125,6 +193,7 @@ function NewsCard({ post, onDelete }) {
     </>
   );
 }
+
 
 export default NewsPosts;
 
