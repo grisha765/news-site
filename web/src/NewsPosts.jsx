@@ -10,7 +10,7 @@ function NewsPosts({ categories = [] }) {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    api.get('/posts')
+    api.get('/posts/')
       .then(response => {
         let filteredPosts = response.data;
         if (categories.length > 0) {
