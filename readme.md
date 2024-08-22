@@ -32,6 +32,8 @@ News site project on javascript, react, vite
         LOG_LEVEL='DEBUG'
         API_IP='0.0.0.0'
         API_PORT='8000'
+        API_HTTPS='/etc/letsencrypt/live/example.com/'
+        ALLOWED_ORIGINS='http://localhost:5173, https://grisha765.github.io'
         DB_PATH='sqlite://:memory:'
         TESTS='True'
         ```
