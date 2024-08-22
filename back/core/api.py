@@ -7,6 +7,7 @@ from core.modules import LoginRequest, LoginResponse, PostCreate, CommentCreate
 from db.file import upload_file, get_file, del_file
 from db.post import add_post, delete_post, get_post, get_all_posts
 from db.comment import send_comment, del_comment, get_comments
+from config.config import Config
 
 async def lifespan(app: FastAPI):
     await init()
@@ -20,7 +21,7 @@ app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=Config.allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
