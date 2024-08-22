@@ -35,12 +35,12 @@ function CreatePost({ onClose, postToEdit = null }) {
     try {
       // Если редактируем пост, сначала удаляем старый
       if (postToEdit) {
-        await api.delete(`/texts/${postToEdit.id}`);
+        await api.delete(`/posts/${postToEdit.id}`);
         await api.delete(`/deletefile/${postToEdit.id}`);
       }
 
       // Создаем новый пост
-      const postResponse = await api.post('/texts/', {
+      const postResponse = await api.post('/posts/', {
         header,
         body,
         category,

@@ -10,7 +10,7 @@ function NewsPosts({ categories = [] }) {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    api.get('/texts')
+    api.get('/posts')
       .then(response => {
         let filteredPosts = response.data;
         if (categories.length > 0) {
@@ -26,7 +26,7 @@ function NewsPosts({ categories = [] }) {
   }, [categories]);
 
   const handleDeletePost = (postId) => {
-    api.delete(`/texts/${postId}`)
+    api.delete(`/posts/${postId}`)
       .then(response => {
         setPosts(posts.filter(post => post.id !== postId));
         console.log('Пост удален:', response.data);
