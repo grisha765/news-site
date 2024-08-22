@@ -3,9 +3,10 @@ from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from db.db import init, close
 from db.auth import create_user_if_not_exists, authenticate_user, hash_password
-from core.modules import LoginRequest, LoginResponse, PostCreate
+from core.modules import LoginRequest, LoginResponse, PostCreate, CommentCreate
 from db.file import upload_file, get_file, del_file
 from db.post import add_post, delete_post, get_post, get_all_posts
+from db.comment import send_comment, del_comment, get_comments
 
 async def lifespan(app: FastAPI):
     await init()
@@ -58,7 +59,7 @@ async def delete_file_endpoint(file_id: int):
         raise HTTPException(status_code=404, detail=result["message"])
     return result
 
-@app.post("/texts/")
+@app.post("/posts/")
 async def create_post(text: PostCreate):
     created_text = await add_post(text.header, text.body, text.category)
     return {
@@ -68,24 +69,51 @@ async def create_post(text: PostCreate):
         "category": created_text.category.name
     }
 
-@app.delete("/texts/{text_id}")
-async def remove_post(text_id: int):
-    success = await delete_post(text_id)
+@app.delete("/posts/{post_id}")
+async def remove_post(post_id: int):
+    success = await delete_post(post_id)
     if not success:
         raise HTTPException(status_code=404, detail="Post not found")
     return {"detail": "Text deleted successfully"}
 
-@app.get("/texts/{text_id}")
-async def read_post(text_id: int):
-    text = await get_post(text_id)
+@app.get("/posts/{post_id}")
+async def read_post(post_id: int):
+    text = await get_post(post_id)
     if not text:
         raise HTTPException(status_code=404, detail="Post not found")
     return text
 
-@app.get("/texts/")
+@app.get("/posts/")
 async def read_all_posts():
     texts = await get_all_posts()
     return texts
+
+@app.post("/comments/")
+async def create_comment(text: CommentCreate):
+    created_comment = await send_comment(text.post_id, text.user, text.text)
+    if not created_comment:
+        raise HTTPException(status_code=404, detail="Post not found")
+    else:
+        return {
+            "post_id": created_comment.post.id,
+            "comment_id": created_comment.id,
+            "username": created_comment.username,
+            "text": created_comment.text
+        }
+
+@app.delete("/comments/{post_id}/{comment_id}")
+async def remove_comment(post_id: int, comment_id: int):
+    success = await del_comment(post_id, comment_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Post or Comment not found")
+    return {"detail": "Comment deleted successfully"}
+
+@app.get("/comments/")
+async def read_comments(post_id: int):
+    comments = await get_comments(post_id)
+    if not comments:
+        raise HTTPException(status_code=404, detail="Post not found")
+    return comments
 
 if __name__ == "__main__":
     raise RuntimeError("This module should be run only via main.py")
