@@ -74,14 +74,15 @@
     background-color: white;
     padding: 20px;
     border-radius: 10px;
-    width: auto;
-    min-width: 300px;
-    max-width: 90%;
+    width: 60%; /* Уменьшите ширину модального окна */
+    max-width: 60%; /* Ограничьте максимальную ширину */
     max-height: 90%;
     text-align: center;
     position: relative;
     overflow-y: auto;
     margin: auto;
+    display: flex;
+    flex-direction: row; /* Расположите элементы по горизонтали */
 }
 
 .modal-content p {
@@ -99,9 +100,13 @@
 }
 
 .modal-image {
-  width: 100%;
-  border-radius: 10px;
-  margin-top: 10px;
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.modal-content-left {
+    width: 100%; /* Установите ширину для левой части модального окна */
 }
 
 .close {
@@ -145,4 +150,66 @@
   background-color: darkred;
 }
 
+.comments-section {
+    width: 30%; /* Задайте ширину секции с комментариями */
+    margin-left: 20px; /* Добавьте отступ слева, чтобы отделить от основного контента */
+    max-height: 100%;
+    overflow-y: auto;
+    text-align: left;
+}
+
+.comment {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.comment p {
+  margin: 0;
+}
+
+.add-comment {
+  margin-top: 10px;
+}
+
+.add-comment textarea {
+  width: 86%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.add-comment button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+}
+
+.add-comment button:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        max-width: none;
+        height: auto;
+        flex-direction: column; /* На маленьких экранах верните элементы в столбец */
+    }
+
+    .comments-section {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 20px;
+    }
+
+    .modal-content-left {
+        width: 100%;
+    }
+}
 
