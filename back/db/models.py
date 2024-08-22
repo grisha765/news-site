@@ -35,6 +35,16 @@ class PostModel(Model):
     class Meta:
         table = "posts"
 
+class CommentModel(Model):
+    id = fields.IntField(pk=True)
+    post = fields.ForeignKeyField('models.PostModel', related_name='comments')
+    username = fields.CharField(max_length=255)
+    text = fields.TextField()
+    created_at = fields.DatetimeField(auto_now_add=True)
+
+    class Meta:
+        table = "comments"
+
 if __name__ == "__main__":
     raise RuntimeError("This module should be run only via main.py")
 
