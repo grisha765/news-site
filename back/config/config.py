@@ -4,6 +4,7 @@ class Config:
     log_level: str = "INFO"
     api_ip: str = "0.0.0.0"
     api_port: int = 8000
+    api_https: str = '/etc/letsencrypt/live/example.com/'
     db_path: str = 'sqlite://:memory:'
     tests: str = 'False'
     
