@@ -5,6 +5,7 @@ class Config:
     api_ip: str = "0.0.0.0"
     api_port: int = 8000
     api_https: str = '/etc/letsencrypt/live/example.com/'
+    allowed_origins: list = ["http://localhost:5173", "https://grisha765.github.io"]
     db_path: str = 'sqlite://:memory:'
     tests: str = 'False'
     
@@ -15,6 +16,8 @@ class Config:
             if env_value is not None:
                 if isinstance(value, int):
                     setattr(cls, key, int(env_value))
+                elif isinstance(value, list):
+                    setattr(cls, key, env_value.split(","))
                 else:
                     setattr(cls, key, env_value)
 
