@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default defineConfig({
-  base: '/news_site',
+  base: '/news-site',
   plugins: [react()],
   define: {
     'process.env': { ...process.env },
