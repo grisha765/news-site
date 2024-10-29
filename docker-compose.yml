@@ -1,0 +1,23 @@
+services:
+  back:
+    build:
+      context: .
+      target: back
+      tags:
+        - "back"
+      container_name: news-site_back
+      ports:
+        - "2081:8000"
+      restart: unless-stopped
+      volumes:
+        - "$HOME/database/:/app/database/:z"
+  web:
+    build:
+      context: .
+      target: web
+      tags:
+        - "web"
+      container_name: news-site_web
+      ports:
+        - "2082:4173"
+      restart: unless-stopped
