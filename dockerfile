@@ -4,9 +4,11 @@ RUN apk add --no-cache gcc musl-dev
 
 WORKDIR /app
 
-COPY ./back /app
+COPY ./requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
+
+COPY ./back /app
 
 ENV PYTHONUNBUFFERED=1
 
