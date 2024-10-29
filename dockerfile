@@ -14,7 +14,7 @@ ENV PYTHONUNBUFFERED=1
 
 ENV DB_PATH="sqlite:///app/database/news-site_back.db"
 
-CMD ["python", "main.py"]
+CMD ["python", "./"]
 
 FROM node:22-alpine as web
 
